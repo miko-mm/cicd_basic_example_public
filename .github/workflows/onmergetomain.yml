@@ -27,4 +27,4 @@ jobs:
 
       - name: Deploy production pipeline
         run: |
-          dbx deploy production_pipeline
+          dbx deploy production_pipeline_miko_mm

@@ -25,6 +25,6 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: Deploy production pipeline
+      - name: Deploy production pipeline miko-mm
         run: |
           dbx deploy production_pipeline

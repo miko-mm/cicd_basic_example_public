@@ -1,0 +1,64 @@
+build:
+  no_build: true
+
+clusters:
+  test-cluster-props: &test-cluster-props
+    spark_version: "12.2.x-cpu-ml-scala2.12"
+    spark_conf:
+      spark.master: "local[*, 4]"
+      spark.databricks.cluster.profile": "singleNode"
+
+  prod-cluster-props: &prod-cluster-props
+    spark_version: "12.2.x-cpu-ml-scala2.12"
+
+  test-cluster: &test-cluster
+    new_cluster:
+      <<: *test-cluster-props
+      num_workers: 0
+      instance_pool_id: "0616-122248-prowl82-pool-g8xxgqsy"
+      driver_instance_pool_id: "0616-122248-prowl82-pool-g8xxgqsy"
+
+  prod-cluster: &prod-cluster
+    new_cluster:
+      <<: *prod-cluster-props
+      num_workers: 0
+      instance_pool_id: "0616-122248-prowl82-pool-g8xxgqsy"
+      driver_instance_pool_id: "0616-122248-prowl82-pool-g8xxgqsy"
+
+git:
+  git-source: &git-source
+    git_url: "https://github.com/DataSentics/cicd_basic_example"
+    git_provider: "github"
+    git_branch: "main"
+
+environments:
+  default:
+    workflows:
+      - name: "production_pipeline"
+        schedule:
+          quartz_cron_expression: 59 0 0 * * ?
+          timezone_id: UTC
+          pause_status: UNPAUSED
+        git_source:
+          <<: *git-source
+        job_clusters:
+          - job_cluster_key: "default"
+            <<: *prod-cluster
+        tasks:
+          - task_key: "features"
+            job_cluster_key: "default"
+            notebook_task:
+              notebook_path: "features"
+
+      - name: "integration_test"
+        git_source:
+          <<: *git-source
+          git_branch: "{{env['GITHUB_HEAD_REF']}}"
+        job_clusters:
+          - job_cluster_key: "default"
+            <<: *test-cluster
+        tasks:
+          - task_key: "features"
+            job_cluster_key: "default"
+            notebook_task:
+              notebook_path: "features"

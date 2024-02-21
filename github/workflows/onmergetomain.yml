@@ -1,0 +1,30 @@
+name: Deploy production pipeline
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+
+    env:
+      DATABRICKS_HOST: ${{ vars.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN:  ${{ secrets.DATABRICKS_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Deploy production pipeline
+        run: |
+          dbx deploy production_pipeline

@@ -25,5 +25,5 @@ jobs:
 
       - name: Run integration test
         run: |
-          dbx deploy integration_test
+          dbx deploy integration_test_miko_mm
           # dbx launch integration_test --trace --existing-runs wait

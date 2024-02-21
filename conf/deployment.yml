@@ -34,7 +34,7 @@ git:
 environments:
   default:
     workflows:
-      - name: "production_pipeline"
+      - name: "production_pipeline_miko_mm"
         schedule:
           quartz_cron_expression: 59 0 0 * * ?
           timezone_id: UTC

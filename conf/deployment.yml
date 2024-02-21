@@ -50,7 +50,7 @@ environments:
             notebook_task:
               notebook_path: "features"
 
-      - name: "integration_test"
+      - name: "integration_test_miko_mm"
         git_source:
           <<: *git-source
           git_branch: "{{env['GITHUB_HEAD_REF']}}"
